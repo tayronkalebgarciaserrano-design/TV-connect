@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TV Connect</title>
+
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Arial, sans-serif; background: #091321; color: white; padding: 20px; }
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.logo { font-size: 23px; font-weight: bold; letter-spacing: 2px; color: #65d9ff; }
+.status { color: #63e6b0; font-size: 12px; }
+.robot { background: linear-gradient(135deg, #19334d, #102238); border: 1px solid #28506b; border-radius: 22px; padding: 25px; text-align: center; margin-bottom: 22px; }
+.robot-icon { font-size: 65px; margin: 8px; }
+.robot h2 { margin-bottom: 5px; }
+.robot p { color: #a9c4d9; font-size: 13px; }
+.battery { background: #1b3046; padding: 15px; border-radius: 15px; margin-top: 18px; }
+.bar { height: 7px; background: #344b60; border-radius: 10px; margin-top: 10px; }
+.fill { width: 86%; height: 100%; background: #56dfb1; border-radius: 10px; }
+h3 { color: #a9dfff; font-size: 15px; margin: 25px 0 13px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.option { background: #14263a; border: 1px solid #243e57; padding: 18px 12px; border-radius: 17px; text-align: left; color: white; cursor: pointer; min-height: 105px; }
+.option:active { background: #21415e; }
+.emoji { font-size: 25px; display: block; margin-bottom: 10px; }
+.option strong { font-size: 14px; }
+.option small { display: block; color: #91a9be; margin-top: 5px; font-size: 11px; }
+.info { background: #14263a; padding: 17px; border-radius: 16px; margin-top: 20px; color: #b9cddd; font-size: 13px; line-height: 1.8; }
+button { font-family: inherit; }
+#pantalla { margin-top: 20px; background: #14263a; padding: 18px; border-radius: 18px; display: none; }
+#pantalla input { width: 100%; padding: 12px; border-radius: 10px; border: none; margin-top: 12px; }
+.action { background: #35aee0; color: #071321; border: none; padding: 12px; border-radius: 10px; margin-top: 10px; font-weight: bold; cursor: pointer; }
+#respuesta { color: #a9dfff; font-size: 13px; margin-top: 12px; white-space: pre-wrap; }
+footer { text-align: center; color: #627d96; font-size: 11px; margin-top: 28px; }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="logo">TV CONNECT</div>
+  <div class="status">● SISTEMA ACTIVO</div>
+</header>
+
+<section class="robot">
+  <div class="robot-icon">📺</div>
+  <h2>Mi sti-v</h2>
+  <p id="animo">Hoy ando joya 😊</p>
+  <div class="battery">
+    🔋 Batería del dispositivo: 67%
+    <div class="bar"><div class="fill"></div></div>
+  </div>
+</section>
+
+<h3>CONTROL DEL sti-vi</h3>
+
+<div class="grid">
+<button class="option" onclick="abrir('humor')">
+  <span class="emoji">😊</span><strong>Estado de ánimo</strong><small>Personalidad y emociones</small>
+</button>
+<button class="option" onclick="abrir('gps')">
+  <span class="emoji">📍</span><strong>Ubicación GPS</strong><small>Localización del dispositivo</small>
+</button>
+<button class="option" onclick="abrir('voz')">
+  <span class="emoji">🎙️</span><strong>Voz y sonido</strong><small>Hablar y escuchar</small>
+</button>
+<button class="option" onclick="abrir('chat')">
+  <span class="emoji">💬</span><strong>Chat inteligente</strong><small>Conversar con el robotsito</small>
+</button>
+<button class="option" onclick="abrir('personalidad')">
+  <span class="emoji">✨</span><strong>Personalidad</strong><small>Forma de comportarse</small>
+</button>
+<button class="option" onclick="abrir('dispositivo')">
+  <span class="emoji">⚙️</span><strong>Dispositivo</strong><small>Información y sistema</small>
+</button>
+<button class="option" onclick="abrir('historial')">
+  <span class="emoji">📚</span><strong>Historial</strong><small>Conversaciones anteriores</small>
+</button>
+<button class="option" onclick="abrir('conexion')">
+  <span class="emoji">📡</span><strong>Conexión</strong><small>Wi-Fi y Bluetooth</small>
+</button>
+<button class="option" onclick="abrir('temperatura')">
+  <span class="emoji">🌡️</span><strong>Temperatura</strong><small>Estado térmico</small>
+</button>
+<button class="option" onclick="abrir('ajustes')">
+  <span class="emoji">🛠️</span><strong>Ajustes</strong><small>Personalizar TV Connect</small>
+</button>
+</div>
+
+<section id="pantalla">
+  <h3 id="titulo"></h3>
+  <div id="contenido"></div>
+  <div id="respuesta"></div>
+  <button class="action" onclick="cerrar()">Volver al inicio</button>
+</section>
+
+<div class="info">
+  <strong>Estado del sistema</strong><br>
+  Dispositivo: TV Connect<br>
+  Conexión: Pendiente de ESP32<br>
+  GPS: Pendiente de módulo<br>
+  Inteligencia artificial: Por conectar
+</div>
+
+<footer>TV CONNECT · TU ASISTENTE PERSONAL</footer>
+
+<script>
+function abrir(opcion) {
+  let titulo = document.getElementById("titulo");
+  let contenido = document.getElementById("contenido");
+  let panel = document.getElementById("pantalla");
+  let respuesta = document.getElementById("respuesta");
+  panel.style.display = "block";
+  respuesta.innerText = "";
+
+  if (opcion === "humor") {
+    titulo.innerText = "Estado de ánimo";
+    contenido.innerHTML = `
+      <p>Selecciona cómo se siente tu robotsito:</p>
+      <button class="action" onclick="cambiarAnimo('Feliz 😊')">Feliz</button>
+      <button class="action" onclick="cambiarAnimo('Tranquilo 😌')">Tranquilo</button>
+      <button class="action" onclick="cambiarAnimo('Curioso 🤔')">Curioso</button>
+      <button class="action" onclick="cambiarAnimo('Emocionado 🤩')">Emocionado</button>`;
+  }
+  if (opcion === "gps") {
+    titulo.innerText = "Ubicación GPS";
+    contenido.innerHTML = `<p>Consulta la ubicación de este teléfono.</p><button class="action" onclick="obtenerGPS()">Consultar ubicación</button>`;
+  }
+  if (opcion === "voz") {
+    titulo.innerText = "Voz y sonido";
+    contenido.innerHTML = `<p>Prueba la voz del robotsito:</p><input id="textoVoz" placeholder="Escribe algo para decir"><button class="action" onclick="hablar()">Reproducir voz</button>`;
+  }
+  if (opcion === "chat") {
+    titulo.innerText = "Chat inteligente";
+    contenido.innerHTML = `<input id="mensaje" placeholder="Escribe un mensaje..."><button class="action" onclick="enviarChat()">Enviar mensaje</button>`;
+  }
+  if (opcion === "personalidad") {
+    titulo.innerText = "Personalidad";
+    contenido.innerHTML = `<p>Selecciona su personalidad:</p><button class="action" onclick="responder('Personalidad amigable seleccionada')">Amigable</button><button class="action" onclick="responder('Personalidad divertida seleccionada')">Divertida</button><button class="action" onclick="responder('Personalidad seria seleccionada')">Seria</button>`;
+  }
+  if (opcion === "dispositivo") {
+    titulo.innerText = "Información del dispositivo";
+    contenido.innerHTML = `<p>Nombre: TV Connect</p><p>Modelo: ESP32 (planeado)</p><p>Batería: 86% (demostración)</p><p>Memoria: Pendiente de conexión</p><p>Temperatura: Sin sensor conectado</p>`;
+  }
+  if (opcion === "historial") {
+    titulo.innerText = "Historial";
+    contenido.innerHTML = `<p>Esta sección guardará las conversaciones.</p><div id="listaHistorial"></div>`;
+    mostrarHistorial();
+  }
+  if (opcion === "conexion") {
+    titulo.innerText = "Conexiones";
+    contenido.innerHTML = `<p>Wi-Fi: Pendiente</p><p>Bluetooth: Pendiente</p><p>ESP32: Desconectado</p>`;
+  }
+  if (opcion === "temperatura") {
+    titulo.innerText = "Temperatura";
+    contenido.innerHTML = `<p>Sensor de temperatura pendiente de conectar.</p>`;
+  }
+  if (opcion === "ajustes") {
+    titulo.innerText = "Configuración";
+    contenido.innerHTML = `<p>Configuraciones generales de TV Connect.</p><button class="action" onclick="responder('Configuración guardada')">Guardar configuración</button>`;
+  }
+  panel.scrollIntoView({behavior:"smooth"});
+}
+
+function cambiarAnimo(animo) { document.getElementById("animo").innerText = "Hoy me siento " + animo; }
+function responder(texto) { document.getElementById("respuesta").innerText = texto; }
+function cerrar() { document.getElementById("pantalla").style.display = "none"; }
+
+function obtenerGPS() {
+  if (!navigator.geolocation) { responder("GPS no disponible en este navegador."); return; }
+  responder("Solicitando permiso de ubicación...");
+  navigator.geolocation.getCurrentPosition(
+    function(posicion) {
+      responder("Latitud: " + posicion.coords.latitude + "\nLongitud: " + posicion.coords.longitude);
+    },
+    function() { responder("No se pudo obtener la ubicación. Revisa los permisos."); }
+  );
+}
+
+function hablar() {
+  let texto = document.getElementById("textoVoz").value;
+  if (!texto) return;
+  if ("speechSynthesis" in window) {
+    let voz = new SpeechSynthesisUtterance(texto);
+    voz.lang = "es-MX";
+    speechSynthesis.speak(voz);
+  } else {
+    responder("La voz no está disponible en este navegador.");
+  }
+}
+
+let historial = [];
+
+function enviarChat() {
+  let entrada = document.getElementById("mensaje");
+  let mensaje = entrada.value.trim();
+  if (!mensaje) return;
+  let respuesta = "¡Hola! Soy tu robotsito. Todavía estoy aprendiendo.";
+  if (mensaje.toLowerCase().includes("hola")) respuesta = "¡Hola! Qué gusto hablar contigo.";
+  if (mensaje.toLowerCase().includes("cómo estás")) respuesta = "¡Estoy de buen humor! 😊";
+  historial.push("Tú: " + mensaje);
+  historial.push("Robotsito: " + respuesta);
+  localStorage.setItem("historialTV", JSON.stringify(historial));
+  document.getElementById("respuesta").innerText = "Tú: " + mensaje + "\nRobotsito: " + respuesta;
+  entrada.value = "";
+}
+
+function mostrarHistorial() {
+  let datos = JSON.parse(localStorage.getItem("historialTV") || "[]");
+  document.getElementById("listaHistorial").innerText = datos.length ? datos.join("\n\n") : "Todavía no hay conversaciones.";
+}
+</script>
+
+</body>
+</html>
